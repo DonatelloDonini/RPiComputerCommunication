@@ -1,0 +1,105 @@
+@import url(resetDefaultCSS.css);
+
+@import url(golden-layout/golden-layout.css);
+@import url(golden-layout/golden-layout-dark-theme.css);
+
+@import url(material-theme/tokens.css);
+@import url(material-theme/colors.module.css);
+@import url(material-theme/typography.module.css);
+@import url(material-theme/theme.light.css) (prefers-color-scheme: light);
+@import url(material-theme/theme.dark.css) (prefers-color-scheme: dark);
+
+* {
+  touch-action: none;
+}
+
+body{
+  display: flex;
+  overflow: hidden;
+}
+
+#tabsContainer{
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+#menuContainer{
+  width: min-content;
+  position: relative;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  padding-right: calc(var(--md-sys-typescale-display-medium-font-size) + 2 * 20px);
+  padding-top: calc(var(--md-sys-typescale-display-medium-font-size) + 2 * 20px);
+  gap: 20px;
+}
+
+#menuContainer>#menuIcon{
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  display: flex;
+  cursor: pointer;
+}
+
+#menuContainer>#menuIconContainer>span{
+  margin: 0 0 0 auto;
+}
+
+#noTabsMessage{
+  line-height: 200%;
+  /* display: block; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.menuSection{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.menuSection>.menuSectionTitleContainer{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menuSection>.menuSectionTitleContainer>.menuSectionTitle{
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: .1em;
+  white-space: nowrap;
+}
+
+#tabNamesContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px 0;
+}
+
+.tab{
+  min-width: min-content;
+  border-left: 5px solid var(--md-sys-color-outline);
+  padding: 1em;
+  margin: 0 0 0 auto;
+  width: 100%;
+}
+
+#menu{
+  display: none;
+}
+
+#leftLiveCamera,
+#rightLiveCamera{
+  max-height: 100%;
+  max-width: 100%;
+  margin: auto;
+}

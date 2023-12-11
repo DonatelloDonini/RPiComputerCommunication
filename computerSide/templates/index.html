@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robot Debugger</title>
+  <script src="https://cdn.socket.io/4.1.3/socket.io.min.js"></script>
+  
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="assets/js/goldenLayout/golden-layout.js"></script>
+
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.0.0/uicons-thin-rounded/css/uicons-thin-rounded.css'>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="background">
+  <div id="menuContainer" class="primary on-primary-text">
+    <span id="menuIcon" class="fi fi-tr-angle-double-right display-medium"></span>
+    
+    <div id="menu">
+      <div class="menuSection">
+        <div class="menuSectionTitleContainer">
+          <span class="menuSectionTitleIcon title-large fi fi-tr-window-alt"></span>
+          <p class="menuSectionTitle label-large">available tabs</p>
+        </div>
+        <div id="tabNamesContainer">
+        </div>
+      </div>
+  
+      <div class="menuSection">
+        <div class="menuSectionTitleContainer">
+          <span class="menuSectionTitleIcon title-large fi fi-tr-arrow-up-right-from-square"></span>
+          <p class="menuSectionTitle label-large">help</p>
+        </div>
+      </div>
+  
+      <div class="menuSection">
+        <div class="menuSectionTitleContainer">
+          <span class="menuSectionTitleIcon title-large fi fi-tr-api"></span>
+          <p class="menuSectionTitle label-large">settings</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="tabsContainer">
+    <p id="noTabsMessage" class="on-background-text body-large">
+      NO TABS ADDED YET.<br>
+      TO ADD TABS, DRAG THEM HERE FROM THE MENU PANEL ON THE LEFT.
+    </p>
+  </div>
+</body>
+<script type="module" src="index.js"></script>
+</html>
