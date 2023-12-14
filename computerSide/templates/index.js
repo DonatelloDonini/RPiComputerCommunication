@@ -1,8 +1,97 @@
+import * as THREE from "three";
+import { OrbitControls } from "three/OrbitControls";
+import Map from "./assets/js/threeJS/Map.js";
+
+const initialize3DEnvironment= (rootNode, map)=> {
+  //////             //////
+  ////// scene setup //////
+  //////             //////
+
+  const scene = new THREE.Scene();
+  // scene.background= new THREE.Color(0x7FB7BE);
+  const camera = new THREE.PerspectiveCamera(10, rootNode.clientWidth / rootNode.clientHeight, 0.1, 1000);
+  camera.position.set(1, 5, 5);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({
+    alpha: true,
+    antialias: true
+  });
+  renderer.setSize(rootNode.clientWidth, rootNode.clientHeight);
+
+  //////        //////
+  ////// lights //////
+  //////        //////
+
+  const sun = new THREE.PointLight(0xffffff, 15);
+  sun.position.set(2, 2, 2);
+
+  // const pointLightHelper = new THREE.PointLightHelper(sun);
+  // scene.add(pointLightHelper);
+
+  const lightHolder = new THREE.Group();
+  lightHolder.add(sun);
+
+  scene.add(lightHolder)
+
+  const minLightLevel = new THREE.AmbientLight(0x606060);
+  scene.add(minLightLevel);
+
+  //////                //////
+  ////// controls setup //////
+  //////                //////
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.mouseButtons = {
+    LEFT: THREE.MOUSE.LEFT,
+    MIDDLE: THREE.MOUSE.MIDDLE,
+    RIGHT: THREE.MOUSE.RIGHT
+  };
+  // controls.enablePan= false;
+
+  //////                           //////
+  ////// 3D environment generation //////
+  //////                           //////
+
+  var axisHelper = new THREE.AxesHelper(3); // 3 is the size of the axes
+  scene.add(axisHelper);
+
+  scene.add(map._3DModel);
+
+  rootNode.appendChild(renderer.domElement);
+
+  //////                //////
+  ////// animation loop //////
+  //////                //////
+
+  const animate = () => {
+    requestAnimationFrame(animate);
+  
+    lightHolder.quaternion.copy(camera.quaternion);
+  
+    renderer.render(scene, camera);
+  };
+  
+  animate();
+
+  return [renderer, camera];
+}
+
 async function main(){
   //////                       //////
   ////// connection with robot //////
   //////                       //////
-
+  
+  const map3DModelContainer= document.createElement("div");
+  map3DModelContainer.id= "environment3D";
+  await Map.initialize3DModel();
+  const map= new Map(0, 0, 0);
+  map.update({
+    "id": 0,
+    "floor": 0,
+  })
+  const [renderer, camera]= initialize3DEnvironment(map3DModelContainer, map);
+  
   const leftLiveCamera= document.createElement("img");
   const rightLiveCamera= document.createElement("img");
   {
@@ -67,18 +156,19 @@ async function main(){
     myLayout.createDragSource(element, newItemConfig);
   };
 
-  // addMenuItem("3DModel", "3DModel", );
+  
+  addMenuItem("3DModel", "model3D", map3DModelContainer);
   addMenuItem("LeftCamera", "leftCameraStream", leftLiveCamera);
   addMenuItem("RightCamera", "rightCameraStream", rightLiveCamera);
-  // addMenuItem("InfoConsole", "You've added me!");
+  // addMenuItem("Console", "console", console);
   // addMenuItem("WarningConsole", "You've added me!");
   // addMenuItem("ErrorConsole", "You've added me!");
   // addMenuItem("NetworkInfo", "You've added me!");
   // addMenuItem("SensorsPanel", "You've added me!");
 
-  //////                                     //////
-  ////// removing labels when tabs are added //////
-  //////                                     //////
+  //////                     //////
+  ////// managing tab events //////
+  //////                     //////
 
   {
     myLayout.on("tabCreated", (tab)=> {
@@ -92,6 +182,31 @@ async function main(){
       const toDisplayLabelID= item.config.title;
       document.getElementById(toDisplayLabelID).style.display= "revert";
     });
+
+    myLayout.on("itemCreated", (item)=> {
+      if (! item.isComponent) return;
+      if (item.config.title=== "model3D"){
+        item.container.on("resize", ()=> {
+
+          const containerWidth = map3DModelContainer.clientWidth;
+          const containerHeight = map3DModelContainer.clientHeight;
+        
+          // Update camera aspect ratio
+          camera.aspect = containerWidth / containerHeight;
+          camera.updateProjectionMatrix();
+        
+          // Update renderer size
+          renderer.setSize(containerWidth, containerHeight);
+        })
+      }
+    });
+
+    myLayout.on("itemDestroyed", (item)=> {
+      if (! item.isComponent) return;
+      if (item.config.title=== "model3D"){
+        item.container.off("resize")
+      }
+    })
   }
 
   //////                            //////

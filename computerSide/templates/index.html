@@ -4,8 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Robot Debugger</title>
-  <script src="https://cdn.socket.io/4.1.3/socket.io.min.js"></script>
   
+  <script src="https://cdn.socket.io/4.1.3/socket.io.min.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@v0.158.0/build/three.module.js",
+        "three/addons": "https://unpkg.com/three@v0.158.0/examples/jsm/controls/OrbitControls",
+        "three/OrbitControls": "https://unpkg.com/three@v0.158.0/examples/jsm/controls/OrbitControls.js",
+        "three/loaders/FontLoader": "https://unpkg.com/three@v0.158.0/examples/jsm/loaders/FontLoader.js",
+        "three/objects/Reflector":  "https://unpkg.com/three@v0.158.0/examples/jsm/objects/Reflector.js",
+        "three/geometries/TextGeometry": "https://unpkg.com/three@v0.158.0/examples/jsm/geometries/TextGeometry.js"
+      }
+    }
+  </script>
+  <script type="module" src="./assets/js/threeJS/CustomErrors.js"></script>
+  <script type="module" src="./assets/js/threeJS/Measures.js"></script>
+  <script type="module" src="./assets/js/threeJS/CustomGeometries.js"></script>
+  <script type="module" src="./assets/js/threeJS/Debugger.js"></script>
+  <script type="module" src="./assets/js/threeJS/Maze.js"></script>
+  <script type="module" src="./assets/js/threeJS/PackageManager.js"></script>
+  <script type="module" src="./assets/js/threeJS/Map.js"></script>
   <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   <script src="assets/js/goldenLayout/golden-layout.js"></script>
 

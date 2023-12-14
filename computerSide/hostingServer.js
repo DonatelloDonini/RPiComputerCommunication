@@ -89,7 +89,9 @@ async function main(){
   const hostname = "robotica.local";
   const RECIEVING_PORT = 5000;
   
-  await sendRecievingInfoToRobot(hostname, RECIEVING_PORT);
+  try {
+    await sendRecievingInfoToRobot(hostname, RECIEVING_PORT);
+  } catch (error) {}
   
   await hostPage(RECIEVING_PORT);
 }
