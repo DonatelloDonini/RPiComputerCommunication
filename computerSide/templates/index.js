@@ -82,18 +82,16 @@ async function main(){
   ////// connection with robot //////
   //////                       //////
   
+  const leftLiveCamera= document.createElement("img");
+  const rightLiveCamera= document.createElement("img");
+
   const map3DModelContainer= document.createElement("div");
   map3DModelContainer.id= "environment3D";
   await Map.initialize3DModel();
-  const map= new Map(0, 0, 0);
-  map.update({
-    "id": 0,
-    "floor": 0,
-  })
+  const map= new Map();
   const [renderer, camera]= initialize3DEnvironment(map3DModelContainer, map);
   
-  const leftLiveCamera= document.createElement("img");
-  const rightLiveCamera= document.createElement("img");
+  const remoteConsole= new RemoteConsole();
   {
     //////                      //////
     ////// live video streaming //////
@@ -121,9 +119,23 @@ async function main(){
     ////// live JSON reciever //////
     //////                    //////
     
-    socket.on("mapUpdate", (data)=> {
-      doNothing(); // work in progress
-    })
+    socket.on("mapUpdate", (update_package)=> {
+      map.update(update_package);
+    });
+
+    socket.on("consoleUpdate", (message)=> {
+      switch (message.type) {
+        case "info":
+          remoteConsole.log(message.message);
+          break;
+        case "warn":
+          remoteConsole.warn(message.message);
+          break;
+        case "error":
+          remoteConsole.error(message.message);
+          break;
+      }
+    });
   }
 
   //////           //////
@@ -155,14 +167,11 @@ async function main(){
 
     myLayout.createDragSource(element, newItemConfig);
   };
-
   
   addMenuItem("3DModel", "model3D", map3DModelContainer);
   addMenuItem("LeftCamera", "leftCameraStream", leftLiveCamera);
   addMenuItem("RightCamera", "rightCameraStream", rightLiveCamera);
-  // addMenuItem("Console", "console", console);
-  // addMenuItem("WarningConsole", "You've added me!");
-  // addMenuItem("ErrorConsole", "You've added me!");
+  addMenuItem("Console", "console", remoteConsole.domElement);
   // addMenuItem("NetworkInfo", "You've added me!");
   // addMenuItem("SensorsPanel", "You've added me!");
 

@@ -1,16 +1,16 @@
 // robot resolving
-import dns from 'dns';
-import net from 'net';
-import { promisify } from 'util';
+import dns from "dns";
+import net from "net";
+import { promisify } from "util";
 
 // client hosting
-import express from 'express';
-import http from 'http';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import express from "express";
+import http from "http";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // live streaming
-import { Server } from 'socket.io';
+import { Server } from "socket.io";
 
 const lookup = promisify(dns.lookup);
 
@@ -61,22 +61,26 @@ const hostPage= async (port)=> {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
 
-  app.use(express.static(path.join(__dirname, 'templates')));
+  app.use(express.static(path.join(__dirname, "templates")));
   const io= new Server(server);
 
-  io.on('connection', (socket) => {
-    console.log('Client connected');
+  io.on("connection", (socket) => {
+    console.log("Client connected");
   
-    socket.on('frame', (data) => {
-      io.emit('frameUpdate', data);
+    socket.on("frame", (data) => {
+      io.emit("frameUpdate", data);
     });
     
-    socket.on('mapUpdatePackage', (data) => {
-      io.emit('mapUpdate', data);
+    socket.on("map_update_package", (update_package) => {
+      io.emit("mapUpdate", update_package);
     });
+
+    socket.on("console_message", (console_message) => {
+      io.emit("consoleUpdate", console_message);
+    })
   
-    socket.on('disconnect', () => {
-      console.log('Client disconnected');
+    socket.on("disconnect", () => {
+      console.log("Client disconnected");
     });
   });
 
